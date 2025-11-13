@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Forex Trader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-graph-up-arrow"></i> AI Forex Trader
+            </span>
+            <div class="d-flex align-items-center">
+                <span id="connection-status" class="badge bg-danger me-2">Disconnected</span>
+                <span id="account-type-badge" class="badge bg-secondary me-2 d-none"></span>
+                <button class="btn btn-outline-light btn-sm" id="connect-btn">Connect MT5</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Account Info -->
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <i class="bi bi-wallet2"></i> Account Info
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <small class="text-muted">Balance</small>
+                            <h4 id="account-balance">$0.00</h4>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">Equity</small>
+                            <h5 id="account-equity">$0.00</h5>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">Profit</small>
+                            <h5 id="account-profit" class="text-success">$0.00</h5>
+                        </div>
+                        <div>
+                            <small class="text-muted">Free Margin</small>
+                            <p id="account-margin">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header bg-success text-white">
+                        <i class="bi bi-robot"></i> Trading Control
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-success w-100 mb-2" id="start-trading-btn" disabled>
+                            <i class="bi bi-play-fill"></i> Start Auto Trading
+                        </button>
+                        <button class="btn btn-danger w-100 mb-2" id="stop-trading-btn" disabled>
+                            <i class="bi bi-stop-fill"></i> Stop Auto Trading
+                        </button>
+                        <button class="btn btn-warning w-100" id="train-model-btn" disabled>
+                            <i class="bi bi-cpu"></i> Train ML Model
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-6">
+                <!-- Signal Analysis -->
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">
+                        <i class="bi bi-bar-chart-line"></i> Signal Analysis
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <select class="form-select" id="symbol-select">
+                                    <option value="EURUSD">EUR/USD</option>
+                                    <option value="GBPUSD">GBP/USD</option>
+                                    <option value="USDJPY">USD/JPY</option>
+                                    <option value="AUDUSD">AUD/USD</option>
+                                    <option value="USDCAD">USD/CAD</option>
+                                    <option value="NZDUSD">NZD/USD</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="timeframe-select">
+                                    <option value="M15">M15</option>
+                                    <option value="M30">M30</option>
+                                    <option value="H1" selected>H1</option>
+                                    <option value="H4">H4</option>
+                                    <option value="D1">D1</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary w-100" id="analyze-btn" disabled>Analyze</button>
+                            </div>
+                        </div>
+
+                        <div id="signal-result" class="d-none">
+                            <div class="alert alert-info text-center" id="signal-alert">
+                                <h3 id="signal-text">NEUTRAL</h3>
+                                <p class="mb-0">Confidence: <span id="signal-confidence">0%</span></p>
+                            </div>
+
+                            <div class="row text-center mb-3">
+                                <div class="col-3">
+                                    <small class="text-muted">RSI</small>
+                                    <p id="ind-rsi" class="fw-bold">-</p>
+                                </div>
+                                <div class="col-3">
+                                    <small class="text-muted">MACD</small>
+                                    <p id="ind-macd" class="fw-bold">-</p>
+                                </div>
+                                <div class="col-3">
+                                    <small class="text-muted">ADX</small>
+                                    <p id="ind-adx" class="fw-bold">-</p>
+                                </div>
+                                <div class="col-3">
+                                    <small class="text-muted">ATR</small>
+                                    <p id="ind-atr" class="fw-bold">-</p>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success w-100" id="execute-trade-btn">
+                                <i class="bi bi-lightning-fill"></i> Execute Trade
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backtest -->
+                <div class="card">
+                    <div class="card-header bg-warning">
+                        <i class="bi bi-clock-history"></i> Backtest
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-warning mb-3" id="backtest-btn" disabled>
+                            <i class="bi bi-play-circle"></i> Run Backtest
+                        </button>
+                        <div id="backtest-results" class="d-none">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <small class="text-muted">Win Rate</small>
+                                    <h4 id="bt-winrate">0%</h4>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted">Total Trades</small>
+                                    <h4 id="bt-trades">0</h4>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted">Return</small>
+                                    <h4 id="bt-return">0%</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Open Positions -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="bi bi-list-ul"></i> Open Positions
+                    </div>
+                    <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                        <div id="positions-list">
+                            <p class="text-muted text-center">No open positions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MT5 Connection Modal -->
+    <div class="modal fade" id="mt5Modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plug"></i> Connect to MetaTrader 5
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Enter your MT5 account credentials. The system will automatically detect if it's a demo or real account.
+                    </div>
+                    
+                    <form id="mt5-form">
+                        <div class="mb-3">
+                            <label class="form-label">Account Login</label>
+                            <input type="text" class="form-control" id="mt5-login" placeholder="12345678" required>
+                            <small class="text-muted">Your MT5 account number</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="mt5-password" placeholder="Your MT5 password" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Server</label>
+                            <input type="text" class="form-control" id="mt5-server" placeholder="ICMarkets-Demo" required>
+                            <small class="text-muted">Example: ICMarkets-Demo, XM-Real, etc.</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">MT5 Installation Path (Optional)</label>
+                            <input type="text" class="form-control" id="mt5-path" value="C:\Program Files\MetaTrader 5\terminal64.exe">
+                            <small class="text-muted">Leave default if MT5 is installed in standard location</small>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="save-credentials">
+                            <label class="form-check-label" for="save-credentials">
+                                Remember credentials (saved locally)
+                            </label>
+                        </div>
+                    </form>
+                    
+                    <div id="connection-error" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="connect-submit">
+                        <i class="bi bi-plug-fill"></i> Connect
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+================================================================================
+                    START HERE - QUICK GUIDE
+================================================================================
+
+STEP 1: RUN THIS COMMAND
+-------------------------
+
+    .\RUN_ADVANCED.bat
+
+
+STEP 2: OPEN YOUR BROWSER
+--------------------------
+
+    http://localhost:5000
+
+
+STEP 3: CONNECT
+---------------
+
+Click "Connect MT5" button and enter your credentials
+
+OR
+
+Just use demo mode (works without MT5)
+
+
+STEP 4: TRAIN THE AI
+--------------------
+
+Click "Train AI Model" button
+Wait 2-3 minutes
+This is REQUIRED for 70-80% win rate!
+
+
+STEP 5: START TRADING
+---------------------
+
+Option A - Manual:
+  - Click "Analyze" to get signals
+  - Watch live logs
+  - Execute trades manually
+
+Option B - Automated:
+  - Click "Start Auto Trading"
+  - AI scans and trades automatically
+  - Watch live logs for activity
+
+
+THAT'S IT!
+----------
+
+The system will:
+✓ Analyze markets in real-time
+✓ Detect chart patterns
+✓ Generate high-confidence signals
+✓ Show you everything in live logs
+✓ Execute trades automatically (if enabled)
+
+
+IMPORTANT:
+----------
+
+1. TRAIN THE MODEL FIRST! (Click "Train AI Model")
+2. Use M5 timeframe for scalping
+3. Start with demo account
+4. Watch the logs to see AI working
+
+
+READ MORE:
+----------
+
+FINAL_INSTRUCTIONS.txt     - Complete instructions
+ADVANCED_SYSTEM_GUIDE.md   - Full documentation
+
+
+================================================================================

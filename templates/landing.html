@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Forex Trading Bot - Automated Trading Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+        }
+        .feature-card {
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .pricing-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+        .pricing-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        .pricing-card.featured {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-robot"></i> AI Forex Bot
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">Start Free Trial</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-4">AI-Powered Forex Trading</h1>
+            <p class="lead mb-5">Automate your trading with advanced AI. 70-80% win rate. Trade from anywhere.</p>
+            <button class="btn btn-light btn-lg px-5" data-bs-toggle="modal" data-bs-target="#signupModal">
+                Start 7-Day Free Trial
+            </button>
+            <p class="mt-3"><small>No credit card required</small></p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Choose Our AI Bot?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-cpu display-4 text-primary mb-3"></i>
+                            <h5>Advanced AI</h5>
+                            <p>Ensemble ML model with 70-80% accuracy. Trained on millions of data points.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-phone display-4 text-success mb-3"></i>
+                            <h5>Trade Anywhere</h5>
+                            <p>Access from phone, tablet, or laptop. No MT5 installation needed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shield-check display-4 text-warning mb-3"></i>
+                            <h5>Risk Management</h5>
+                            <p>Smart stop-loss and take-profit. Auto-close on profit or $10 loss limit.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-graph-up display-4 text-info mb-3"></i>
+                            <h5>30+ Indicators</h5>
+                            <p>RSI, MACD, ADX, Bollinger Bands, and 26 more technical indicators.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-lightning display-4 text-danger mb-3"></i>
+                            <h5>Scalping Strategy</h5>
+                            <p>Quick profits with M5/M15 timeframes. Multiple confirmations required.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="bi bi-eye display-4 text-secondary mb-3"></i>
+                            <h5>Pattern Recognition</h5>
+                            <p>Detects 10+ chart patterns: engulfing, hammer, double tops, and more.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Simple, Transparent Pricing</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card pricing-card">
+                        <div class="card-body text-center p-4">
+                            <h3>Free Trial</h3>
+                            <h2 class="display-4">$0</h2>
+                            <p class="text-muted">7 days</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> 1 trading pair</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Manual trading</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Basic indicators</li>
+                                <li class="mb-2"><i class="bi bi-x text-danger"></i> Auto-trading</li>
+                                <li class="mb-2"><i class="bi bi-x text-danger"></i> Advanced AI</li>
+                            </ul>
+                            <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#signupModal">Start Free Trial</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card pricing-card featured">
+                        <div class="card-body text-center p-4">
+                            <span class="badge bg-primary mb-2">Most Popular</span>
+                            <h3>Basic</h3>
+                            <h2 class="display-4">$29</h2>
+                            <p class="text-muted">per month</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> 3 trading pairs</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Auto-trading</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> All indicators</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Email alerts</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Priority support</li>
+                            </ul>
+                            <button class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#signupModal">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card pricing-card">
+                        <div class="card-body text-center p-4">
+                            <h3>Pro</h3>
+                            <h2 class="display-4">$99</h2>
+                            <p class="text-muted">per month</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Unlimited pairs</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Advanced AI</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Custom strategies</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> API access</li>
+                                <li class="mb-2"><i class="bi bi-check text-success"></i> Dedicated support</li>
+                            </ul>
+                            <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#signupModal">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="loginError"></div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Start Free Trial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="signupEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signupPassword" required>
+                            <small class="text-muted">At least 6 characters</small>
+                        </div>
+                        <div class="alert alert-danger d-none" id="signupError"></div>
+                        <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                    </form>
+                    <p class="text-center mt-3 mb-0">
+                        <small>Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Login</a></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, password})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/dashboard';
+                } else {
+                    document.getElementById('loginError').textContent = data.message;
+                    document.getElementById('loginError').classList.remove('d-none');
+                }
+            } catch (error) {
+                document.getElementById('loginError').textContent = 'Error: ' + error.message;
+                document.getElementById('loginError').classList.remove('d-none');
+            }
+        });
+        
+        // Signup
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, password})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/dashboard';
+                } else {
+                    document.getElementById('signupError').textContent = data.message;
+                    document.getElementById('signupError').classList.remove('d-none');
+                }
+            } catch (error) {
+                document.getElementById('signupError').textContent = 'Error: ' + error.message;
+                document.getElementById('signupError').classList.remove('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

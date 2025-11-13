@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Forex Bot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .broker-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e0e0e0;
+        }
+        .broker-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .broker-card.selected {
+            border-color: #667eea;
+            background-color: #f0f4ff;
+        }
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                <i class="bi bi-robot"></i> AI Forex Bot
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3">
+                    <i class="bi bi-person-circle"></i> {{ user.email }}
+                </span>
+                <span class="badge bg-primary me-3">{{ user.subscription_plan.upper() }}</span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Connection Status -->
+        <div class="alert alert-info" id="connectionStatus" style="display: none;">
+            <i class="bi bi-info-circle"></i> Not connected to any broker. Please connect below.
+        </div>
+        
+        <div class="alert alert-success" id="connectedStatus" style="display: none;">
+            <i class="bi bi-check-circle"></i> Connected to broker successfully!
+        </div>
+
+        <!-- Broker Selection -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-bank"></i> Connect Your Broker</h5>
+            </div>
+            <div class="card-body">
+                <h6>Choose Your Broker:</h6>
+                <div class="row g-3 mb-4">
+                    <!-- Deriv -->
+                    <div class="col-md-4">
+                        <div class="card broker-card" onclick="selectBroker('deriv')">
+                            <div class="card-body text-center">
+                                <h5>Deriv</h5>
+                                <p class="text-muted small">Cloud-based, M-Pesa, 24/7 trading</p>
+                                <span class="badge bg-success">Kenya ✓</span>
+                                <span class="badge bg-info">Mobile ✓</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- MT5 -->
+                    <div class="col-md-4">
+                        <div class="card broker-card" onclick="selectBroker('mt5')">
+                            <div class="card-body text-center">
+                                <h5>MetaTrader 5</h5>
+                                <p class="text-muted small">Exness, HFM, Windsor, XM, FBS</p>
+                                <span class="badge bg-success">Kenya ✓</span>
+                                <span class="badge bg-warning">PC Required</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- OANDA -->
+                    <div class="col-md-4">
+                        <div class="card broker-card" onclick="selectBroker('oanda')">
+                            <div class="card-body text-center">
+                                <h5>OANDA</h5>
+                                <p class="text-muted small">Professional, cloud-based</p>
+                                <span class="badge bg-danger">Not in Kenya</span>
+                                <span class="badge bg-info">Mobile ✓</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connection Forms -->
+                <div id="derivForm" class="d-none">
+                    <h6>Connect Deriv</h6>
+                    <div class="mb-3">
+                        <label class="form-label">API Token</label>
+                        <input type="text" class="form-control" id="derivToken" placeholder="Get from deriv.com/account/api-token">
+                        <small class="text-muted">
+                            <a href="https://deriv.com/" target="_blank">Create Deriv account</a> | 
+                            <a href="https://deriv.com/account/api-token" target="_blank">Get API token</a>
+                        </small>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="derivDemo" checked>
+                        <label class="form-check-label" for="derivDemo">Demo Account</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="connectDeriv()">Connect Deriv</button>
+                </div>
+
+                <div id="mt5Form" class="d-none">
+                    <h6>Connect MT5 Broker</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Select Broker</label>
+                        <select class="form-select" id="mt5Broker">
+                            <option value="exness">Exness ($1 min, M-Pesa)</option>
+                            <option value="hfm">HFM - HotForex ($5 min, M-Pesa)</option>
+                            <option value="windsor">Windsor Brokers ($50 min)</option>
+                            <option value="xm">XM ($5 min, Free $30)</option>
+                            <option value="fbs">FBS ($1 min, M-Pesa)</option>
+                            <option value="ic_markets">IC Markets ($200 min, Pro)</option>
+                            <option value="tickmill">Tickmill ($100 min)</option>
+                            <option value="other">Other MT5 Broker</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Login</label>
+                        <input type="text" class="form-control" id="mt5Login" placeholder="Your MT5 account number">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="mt5Password" placeholder="Your MT5 password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Server</label>
+                        <input type="text" class="form-control" id="mt5Server" placeholder="e.g., Exness-MT5Real">
+                        <small class="text-muted">Get server name from your broker</small>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="mt5Demo">
+                        <label class="form-check-label" for="mt5Demo">Demo Account</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="connectMT5()">Connect MT5</button>
+                </div>
+
+                <div id="oandaForm" class="d-none">
+                    <h6>Connect OANDA</h6>
+                    <div class="mb-3">
+                        <label class="form-label">API Key</label>
+                        <input type="text" class="form-control" id="oandaKey" placeholder="Your OANDA API key">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Account ID</label>
+                        <input type="text" class="form-control" id="oandaAccount" placeholder="Your OANDA account ID">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="oandaDemo" checked>
+                        <label class="form-check-label" for="oandaDemo">Practice Account</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="connectOANDA()">Connect OANDA</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Section (shown after connection) -->
+        <div id="tradingSection" class="d-none">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-graph-up"></i> Trading</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Symbol</label>
+                                    <select class="form-select" id="symbol">
+                                        <option value="EURUSD">EUR/USD</option>
+                                        <option value="GBPUSD">GBP/USD</option>
+                                        <option value="USDJPY">USD/JPY</option>
+                                        <option value="XAUUSD">Gold</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Timeframe</label>
+                                    <select class="form-select" id="timeframe">
+                                        <option value="M5">M5</option>
+                                        <option value="M15">M15</option>
+                                        <option value="H1">H1</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="analyze()">Analyze</button>
+                            <button class="btn btn-success" onclick="startAutoTrading()">Start Auto Trading</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-wallet2"></i> Account</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Balance:</strong> <span id="balance">$0.00</span></p>
+                            <p><strong>Equity:</strong> <span id="equity">$0.00</span></p>
+                            <p><strong>Profit:</strong> <span id="profit">$0.00</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedBroker = null;
+        let isConnected = false;
+        
+        // Check connection status on page load
+        window.addEventListener('DOMContentLoaded', checkConnection);
+
+        function selectBroker(broker) {
+            selectedBroker = broker;
+            
+            // Hide all forms
+            document.getElementById('derivForm').classList.add('d-none');
+            document.getElementById('mt5Form').classList.add('d-none');
+            document.getElementById('oandaForm').classList.add('d-none');
+            
+            // Show selected form
+            document.getElementById(broker + 'Form').classList.remove('d-none');
+            
+            // Update card selection
+            document.querySelectorAll('.broker-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        async function connectDeriv() {
+            const token = document.getElementById('derivToken').value;
+            const demo = document.getElementById('derivDemo').checked;
+            
+            if (!token) {
+                alert('Please enter API token');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/connect-broker', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        broker_type: 'deriv',
+                        credentials: { api_token: token },
+                        demo: demo
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Connected to Deriv successfully!');
+                    // Show connected state
+                    showConnectedState(data.account);
+                    // Hide broker selection
+                    document.querySelector('.card').style.display = 'none';
+                } else {
+                    alert('Connection failed: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function connectMT5() {
+            const login = document.getElementById('mt5Login').value;
+            const password = document.getElementById('mt5Password').value;
+            const server = document.getElementById('mt5Server').value;
+            const demo = document.getElementById('mt5Demo').checked;
+            
+            if (!login || !password || !server) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/connect-broker', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        broker_type: 'mt5',
+                        credentials: { login, password, server },
+                        demo: demo
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Connected to MT5 successfully!');
+                    // Show connected state
+                    showConnectedState(data.account);
+                    // Hide broker selection
+                    document.querySelector('.card').style.display = 'none';
+                } else {
+                    alert('Connection failed: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function connectOANDA() {
+            const apiKey = document.getElementById('oandaKey').value;
+            const accountId = document.getElementById('oandaAccount').value;
+            const demo = document.getElementById('oandaDemo').checked;
+            
+            if (!apiKey || !accountId) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/connect-broker', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        broker_type: 'oanda',
+                        credentials: { api_key: apiKey, account_id: accountId },
+                        demo: demo
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Connected to OANDA successfully!');
+                    // Show connected state
+                    showConnectedState(data.account);
+                    // Hide broker selection
+                    document.querySelector('.card').style.display = 'none';
+                } else {
+                    alert('Connection failed: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        }
+
+        function analyze() {
+            alert('Analysis feature coming soon! Connect your broker first.');
+        }
+
+        function startAutoTrading() {
+            alert('Auto-trading feature coming soon! Connect your broker first.');
+        }
+        
+        async function checkConnection() {
+            try {
+                const response = await fetch('/api/account');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.balance !== undefined) {
+                        // User is connected
+                        isConnected = true;
+                        showConnectedState(data);
+                    } else {
+                        showDisconnectedState();
+                    }
+                } else {
+                    showDisconnectedState();
+                }
+            } catch (error) {
+                showDisconnectedState();
+            }
+        }
+        
+        function showConnectedState(accountData) {
+            // Hide connection forms
+            document.getElementById('connectionStatus').style.display = 'none';
+            document.getElementById('connectedStatus').style.display = 'block';
+            
+            // Show trading section
+            document.getElementById('tradingSection').classList.remove('d-none');
+            
+            // Update account info
+            if (accountData) {
+                document.getElementById('balance').textContent = '$' + accountData.balance.toFixed(2);
+                document.getElementById('equity').textContent = '$' + accountData.equity.toFixed(2);
+                document.getElementById('profit').textContent = '$' + accountData.profit.toFixed(2);
+            }
+            
+            // Refresh account info every 5 seconds
+            setInterval(updateAccountInfo, 5000);
+        }
+        
+        function showDisconnectedState() {
+            document.getElementById('connectionStatus').style.display = 'block';
+            document.getElementById('connectedStatus').style.display = 'none';
+            document.getElementById('tradingSection').classList.add('d-none');
+        }
+        
+        async function updateAccountInfo() {
+            try {
+                const response = await fetch('/api/account');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('balance').textContent = '$' + data.balance.toFixed(2);
+                    document.getElementById('equity').textContent = '$' + data.equity.toFixed(2);
+                    document.getElementById('profit').textContent = '$' + data.profit.toFixed(2);
+                }
+            } catch (error) {
+                console.error('Error updating account:', error);
+            }
+        }
+    </script>
+</body>
+</html>

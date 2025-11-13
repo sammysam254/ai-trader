@@ -1,0 +1,99 @@
+================================================================================
+                    AI FOREX TRADER - NEXT STEPS
+================================================================================
+
+CURRENT STATUS:
+✓ Python 3.11 installed
+✓ All packages installed
+✓ System ready to use
+✗ MetaTrader 5 terminal NOT installed
+
+================================================================================
+                        CHOOSE YOUR PATH
+================================================================================
+
+OPTION 1: Quick Start (Demo Mode - No MT5 Needed)
+--------------------------------------------------
+Run this command:
+    START_DEMO_MODE.bat
+
+Then open: http://localhost:5000
+
+- Uses sample forex data
+- All features work
+- Perfect for testing
+
+
+OPTION 2: Real MT5 Connection (Recommended)
+--------------------------------------------
+1. Install MetaTrader 5 (see INSTALL_MT5.md)
+   - Download from a broker (IC Markets, XM, etc.)
+   - Takes 2 minutes to install
+   - Open a free demo account
+
+2. Run this command:
+    START_TRADING.bat
+
+3. Open: http://localhost:5000
+
+4. Click "Connect MT5" and enter your credentials
+
+
+================================================================================
+                        DETAILED GUIDES
+================================================================================
+
+README_START_HERE.md  - Complete getting started guide
+INSTALL_MT5.md        - How to install MetaTrader 5
+CONFIGURE_MT5.md      - How to find your MT5 credentials
+SETUP_GUIDE.md        - Full setup documentation
+
+
+================================================================================
+                        USEFUL COMMANDS
+================================================================================
+
+Check system status:
+    .\venv311\Scripts\python.exe diagnose.py
+
+Test MT5 connection:
+    .\venv311\Scripts\python.exe test_mt5_quick.py
+
+Start demo mode:
+    START_DEMO_MODE.bat
+
+Start with MT5:
+    START_TRADING.bat
+
+
+================================================================================
+                        QUICK SUMMARY
+================================================================================
+
+The system is READY TO USE!
+
+You just need to decide:
+- Use DEMO MODE (sample data) - Start immediately
+- Install MT5 (real data) - Takes 5 minutes
+
+Both options give you full access to:
+✓ 30+ technical indicators
+✓ Machine learning predictions
+✓ Signal generation
+✓ Backtesting
+✓ Auto trading
+✓ Web dashboard
+
+
+================================================================================
+                        RECOMMENDED: START WITH DEMO
+================================================================================
+
+1. Run: START_DEMO_MODE.bat
+2. Open: http://localhost:5000
+3. Learn the interface
+4. Test features
+5. Then install MT5 for real data
+
+
+================================================================================
