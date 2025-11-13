@@ -311,6 +311,29 @@ def disconnect_broker():
     return jsonify({'success': True})
 
 
+@app.route('/api/account')
+def get_account():
+    """Get account information."""
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user_id = session['user_id']
+    
+    if user_id not in user_sessions:
+        return jsonify({'error': 'Not connected to broker'}), 400
+    
+    try:
+        broker = user_sessions[user_id]['broker']
+        account_info = broker.get_account_info()
+        
+        if account_info:
+            return jsonify(account_info)
+        else:
+            return jsonify({'error': 'Failed to get account info'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 # ============================================================================
 # TRADING ROUTES
 # ============================================================================

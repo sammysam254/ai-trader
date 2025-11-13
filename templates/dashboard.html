@@ -366,12 +366,46 @@
             window.location.href = '/';
         }
 
-        function analyze() {
-            alert('Analysis feature coming soon! Connect your broker first.');
+        async function analyze() {
+            const symbol = document.getElementById('symbol').value;
+            const timeframe = document.getElementById('timeframe').value;
+            
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ symbol, timeframe })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert(`Analysis Complete!\n\nSymbol: ${data.symbol}\nSignal: ${data.signal_text}\nConfidence: ${(data.confidence * 100).toFixed(1)}%\n\nBuy Score: ${data.buy_score.toFixed(1)}\nSell Score: ${data.sell_score.toFixed(1)}`);
+                }
+            } catch (error) {
+                alert('Error analyzing: ' + error.message);
+            }
         }
 
-        function startAutoTrading() {
-            alert('Auto-trading feature coming soon! Connect your broker first.');
+        async function startAutoTrading() {
+            if (!confirm('Start automated trading? The AI will analyze markets and execute trades automatically.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/start-auto-trading', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Auto-trading started! Watch the logs for updates.');
+                } else {
+                    alert('Failed to start: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
         }
         
         async function checkConnection() {
