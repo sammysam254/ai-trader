@@ -196,7 +196,7 @@ class DerivConnector:
             print(f"Converting {symbol} to {deriv_symbol}")
             
             # Request candles
-            response = self._send_request({
+            request_data = {
                 "ticks_history": deriv_symbol,
                 "adjust_start_time": 1,
                 "count": bars,
@@ -204,10 +204,17 @@ class DerivConnector:
                 "start": 1,
                 "style": "candles",
                 "granularity": granularity
-            })
+            }
+            print(f"Requesting data: {request_data}")
+            
+            response = self._send_request(request_data)
+            
+            print(f"Response: {response}")
             
             if not response or 'candles' not in response:
                 print(f"Failed to get data for {deriv_symbol}")
+                if response and 'error' in response:
+                    print(f"Error from Deriv: {response['error']}")
                 return None
             
             candles = response['candles']
