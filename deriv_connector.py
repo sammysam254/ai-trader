@@ -84,6 +84,7 @@ class DerivConnector:
         """Handle WebSocket messages."""
         try:
             data = json.loads(message)
+            print(f"Received message: {data}")
             
             # Handle authorization
             if 'authorize' in data:
@@ -95,6 +96,7 @@ class DerivConnector:
             
             # Store response for retrieval
             if 'req_id' in data:
+                print(f"Storing response for req_id: {data['req_id']}")
                 self.responses[data['req_id']] = data
                 
         except Exception as e:
