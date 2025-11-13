@@ -181,13 +181,19 @@ class DerivConnector:
             granularity = timeframe_map.get(timeframe, 300)
             
             # Convert symbol to Deriv format
-            if symbol.startswith('frx'):
-                deriv_symbol = symbol
-            elif len(symbol) == 6 and symbol[:3].isalpha():
-                # Convert EURUSD to frxEURUSD
-                deriv_symbol = f"frx{symbol}"
-            else:
-                deriv_symbol = symbol
+            # Deriv uses different symbols than MT5
+            symbol_map = {
+                'EURUSD': 'frxEURUSD',
+                'GBPUSD': 'frxGBPUSD', 
+                'USDJPY': 'frxUSDJPY',
+                'AUDUSD': 'frxAUDUSD',
+                'USDCAD': 'frxUSDCAD',
+                'NZDUSD': 'frxNZDUSD',
+                'XAUUSD': 'frxXAUUSD'
+            }
+            
+            deriv_symbol = symbol_map.get(symbol, f"frx{symbol}")
+            print(f"Converting {symbol} to {deriv_symbol}")
             
             # Request candles
             response = self._send_request({
@@ -243,13 +249,18 @@ class DerivConnector:
             Order result dict or None
         """
         try:
-            # Convert symbol
-            if symbol.startswith('frx'):
-                deriv_symbol = symbol
-            elif len(symbol) == 6:
-                deriv_symbol = f"frx{symbol}"
-            else:
-                deriv_symbol = symbol
+            # Convert symbol using the same mapping
+            symbol_map = {
+                'EURUSD': 'frxEURUSD',
+                'GBPUSD': 'frxGBPUSD', 
+                'USDJPY': 'frxUSDJPY',
+                'AUDUSD': 'frxAUDUSD',
+                'USDCAD': 'frxUSDCAD',
+                'NZDUSD': 'frxNZDUSD',
+                'XAUUSD': 'frxXAUUSD'
+            }
+            
+            deriv_symbol = symbol_map.get(symbol, f"frx{symbol}")
             
             # Deriv uses stake amount, not lots
             stake = volume * 10  # Convert lots to USD stake
